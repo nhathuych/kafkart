@@ -44,3 +44,16 @@ To generate a new Express service (without E2E tests):
 ```sh
 nx g @nx/express:app api-gateway --directory=apps/api-gateway --e2eTestRunner=none
 ```
+
+## Generate Swagger (using swagger-autogen)
+
+Install the `swagger-autogen` dependency if not already installed:
+```sh
+npm i swagger-autogen
+```
+
+Each service can define its own Swagger schema via a script. For example, to generate for `auth-service`:
+```sh
+cd apps/auth-service
+node src/swagger.ts
+```
