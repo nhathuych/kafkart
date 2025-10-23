@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Activation - Kafkart</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        color: #333;
+        background-color: #f4f4f7;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      }
+      .email-header {
+        padding: 30px;
+        text-align: center;
+        color: #fff;
+        background-color: #2563eb;
+      }
+      .email-header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .email-body {
+        padding: 30px;
+      }
+      .email-body p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .otp-wrapper {
+        text-align: center;
+        margin: 20px 0;
+      }
+      .otp-code {
+        display: inline-block;
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        color: #0c4a6e;
+        background-color: #e0f2fe;
+        padding: 10px 20px;
+        border-radius: 6px;
+      }
+      .email-footer {
+        font-size: 13px;
+        padding: 20px 30px;
+        text-align: center;
+        color: #6b7280;
+        background-color: #f9fafb;
+      }
+      .email-footer a {
+        color: #2563eb;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="email-header">
+        <h1>Welcome to Kafkart!</h1>
+      </div>
+      <div class="email-body">
+        <p>Hi <strong><%= name %></strong>,</p>
+        <p>Thanks for signing up for Kafkart. To activate your account, please use the code below:</p>
+        
+        <div class="otp-wrapper">
+          <div class="otp-code"><%= otp %></div>
+        </div>
+
+        <p>This code is valid for the next 5 minutes. Please enter it on the activation page.</p>
+        <p>If you didn't sign up for Kafkart, you can safely ignore this email.</p>
+      </div>
+      <div class="email-footer">
+        <p>
+          Need help? Contact us at
+          <a href="mailto:support@kafkart.com">support@kafkart.com</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
