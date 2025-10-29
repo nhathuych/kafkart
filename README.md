@@ -33,6 +33,18 @@ To see all available targets to run for a project, run:
 npx nx show project auth-service
 ```
 
+## Generate a new NextJS app
+
+Before generating, install the Nx plugin for NextJS:
+```sh
+nx add @nx/next
+```
+
+Then generate a new NextJS application:
+```sh
+nx g @nx/next:app apps/user-ui
+```
+
 ## Generate a new Express service
 
 Before generating, install the Nx plugin for Express:
