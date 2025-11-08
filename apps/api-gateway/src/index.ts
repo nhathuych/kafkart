@@ -1,10 +1,10 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
-import helmet from 'helmet';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import { createServiceProxy, services } from './config/proxy.config.js';
 
 const app = express();
 
@@ -27,27 +27,22 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: true,
   keyGenerator: (req: any) => req.ip,
+  skip: (req) => (req.path.endsWith('/health') || req.path === '/healthz'),
 });
 app.use(limiter);
 
-app.get('/health-check', (req, res) => {
-  res.send({ message: 'Welcome to api-gateway!' });
+app.get('/healthz', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'api-gateway',
+    uptime: process.uptime(),
+    timestamp: new Date().toLocaleString(),
+  });
 });
 
-// app.use(
-//   '/api/v1/products',
-//   createProxyMiddleware({
-//     target: process.env.PRODUCT_SERVICE_URL!,
-//     changeOrigin: true,
-//     pathRewrite: { '^/api/v1/products': '/products' },
-//     on: {
-//       error: (err, req, res) => {
-//         console.error('Proxy error:', err);
-//         (res as any).status(502).json({ message: 'Product service unavailable', error: err.message });
-//       },
-//     },
-//   })
-// );
+services.forEach((route) => {
+  app.use(route.prefix, createServiceProxy(route));
+});
 
 const port = process.env.PORT || 3002;
 const server = app.listen(port, () => {
