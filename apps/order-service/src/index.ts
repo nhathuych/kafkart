@@ -1,4 +1,6 @@
 import Fastify from 'fastify';
+import Clerk from '@clerk/fastify';
+import { shouldBeUser } from './hooks/auth.hook.js';
 
 const fastify = Fastify({
   logger: {
@@ -41,12 +43,15 @@ fastify.addHook('onResponse', async (request: any, reply) => {
   console.log();
 });
 
-fastify.get('/health', async (request, reply) => {
+fastify.register(Clerk.clerkPlugin);
+
+fastify.get('/health', { preHandler: shouldBeUser }, async (request, reply) => {
   reply.status(200).send({
     status: 'ok',
     service: 'order-service',
     uptime: process.uptime(),
     timestamp: new Date().toLocaleString(),
+    userId: request.userId,
   });
 });
 

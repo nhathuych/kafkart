@@ -1,18 +1,22 @@
 import express, { Request, Response } from 'express';
 import { requestLogger } from './middleware/request.logger.js';
+import { clerkMiddleware } from '@clerk/express';
+import { shouldBeUser } from './middleware/auth.middleware.js';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
+app.use(clerkMiddleware());
 
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', shouldBeUser, (req: Request, res: Response) => {
   res.status(200).json({
     status: 'ok',
     service: 'product-service',
     uptime: process.uptime(),
     timestamp: new Date().toLocaleString(),
+    userId: req.userId,
   });
 });
 
