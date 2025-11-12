@@ -1,7 +1,9 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { requestLogger } from './middleware/request.logger.js';
 import { clerkMiddleware } from '@clerk/express';
 import { shouldBeUser } from './middleware/auth.middleware.js';
+import productRouter from './routes/product.route.js';
+import categoryRouter from './routes/category.route.js';
 
 const app = express();
 
@@ -18,6 +20,14 @@ app.get('/health', shouldBeUser, (req: Request, res: Response) => {
     timestamp: new Date().toLocaleString(),
     userId: req.userId,
   });
+});
+
+app.use('/products', productRouter);
+app.use('/categories', categoryRouter);
+
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  console.log(error);
+  return res.status(error.status || 500).json({ message: error.message || 'Internal Server Error!' });
 });
 
 const port = process.env.PORT || 3003;

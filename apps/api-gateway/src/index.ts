@@ -15,10 +15,17 @@ app.use(cors({
 }));
 app.use(helmet());
 app.use(morgan('dev'));
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(cookieParser());
 app.set('trust proxy', 1);
+
+// Register proxy routes before body-parsing middlewares.
+// This ensures the raw request body is preserved for proxied services.
+services.forEach((route) => {
+  app.use(route.prefix, createServiceProxy(route));
+});
+
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,   // 15 minutes
@@ -38,10 +45,6 @@ app.get('/healthz', (req: Request, res: Response) => {
     uptime: process.uptime(),
     timestamp: new Date().toLocaleString(),
   });
-});
-
-services.forEach((route) => {
-  app.use(route.prefix, createServiceProxy(route));
 });
 
 const port = process.env.PORT || 3002;
