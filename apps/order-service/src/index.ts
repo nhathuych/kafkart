@@ -1,6 +1,8 @@
 import Fastify from 'fastify';
 import Clerk from '@clerk/fastify';
 import { shouldBeUser } from './hooks/auth.hook.js';
+import { connectToOrderDB } from '@repo/order-db';
+import { orderRoute } from './routes/order.route.js';
 
 const fastify = Fastify({
   logger: {
@@ -44,6 +46,7 @@ fastify.addHook('onResponse', async (request: any, reply) => {
 });
 
 fastify.register(Clerk.clerkPlugin);
+fastify.register(orderRoute, { prefix: '/orders' });
 
 fastify.get('/health', { preHandler: shouldBeUser }, async (request, reply) => {
   reply.status(200).send({
@@ -55,6 +58,7 @@ fastify.get('/health', { preHandler: shouldBeUser }, async (request, reply) => {
   });
 });
 
+await connectToOrderDB();
 const port = process.env.PORT || 3004;
 fastify.listen({ port: Number(port) }, (err, address) => {
   if (err) throw err;
