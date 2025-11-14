@@ -1,5 +1,5 @@
 import ProductInteraction from '@/components/ProductInteraction';
-import { ProductType } from '@/types';
+import { ProductType } from '@repo/types';
 import Image from 'next/image';
 
 // TEMPORARY
@@ -16,6 +16,9 @@ const product: ProductType = {
     purple: '/products/1p.png',
     green: '/products/1gr.png',
   },
+  categorySlug: 'test',
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export const generateMetadata = async ({
@@ -47,7 +50,7 @@ const ProductPage = async ({
       {/* IMAGE */}
       <div className='relative w-full lg:w-5/12 aspect-2/3'>
         <Image
-          src={product.images[selectedColor]?.toString() || ''}
+          src={(product.images as Record<string, string>)?.[selectedColor] || ''}
           alt={product.name}
           fill
           className='rounded-md object-contain'

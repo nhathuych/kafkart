@@ -212,6 +212,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -282,6 +285,9 @@ importers:
       pino-pretty:
         specifier: ^13.1.2
         version: 13.1.2
+      stripe:
+        specifier: 18.5.0
+        version: 18.5.0(@types/node@20.19.24)
     devDependencies:
       '@repo/types':
         specifier: workspace:*
@@ -393,6 +399,13 @@ importers:
         version: 6.19.0(typescript@5.9.3)
 
   packages/types:
+    dependencies:
+      '@repo/product-db':
+        specifier: workspace:*
+        version: link:../product-db
+      zod:
+        specifier: ^4.0.14
+        version: 4.1.12
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
@@ -3510,6 +3523,15 @@ packages:
   strip-json-comments@5.0.3:
     resolution: {integrity: sha512-1tB5mhVo7U+ETBKNf92xT4hrQa3pm0MZ0PQvuDnWgAAGHDsfp4lPSpiS6psrSiet87wyGPh9ft6wmhOMQ0hDiw==}
     engines: {node: '>=14.16'}
+
+  stripe@18.5.0:
+    resolution: {integrity: sha512-Hp+wFiEQtCB0LlNgcFh5uVyKznpDjzyUZ+CNVEf+I3fhlYvh7rZruIg+jOwzJRCpy0ZTPMjlzm7J2/M2N6d+DA==}
+    engines: {node: '>=12.*'}
+    peerDependencies:
+      '@types/node': '>=12.x.x'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
 
   styled-jsx@5.1.6:
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
@@ -7038,6 +7060,12 @@ snapshots:
   strip-json-comments@3.1.1: {}
 
   strip-json-comments@5.0.3: {}
+
+  stripe@18.5.0(@types/node@20.19.24):
+    dependencies:
+      qs: 6.14.0
+    optionalDependencies:
+      '@types/node': 20.19.24
 
   styled-jsx@5.1.6(react@19.1.0):
     dependencies:
