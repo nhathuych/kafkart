@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { requestLogger } from './middleware/request.logger.js';
 import { clerkMiddleware } from '@hono/clerk-auth';
 import { shouldBeUser } from './middleware/auth.middleware.js';
+import sessionRoute from './routes/session.route.js';
 
 const app = new Hono();
 
@@ -18,6 +19,8 @@ app.get('/health', shouldBeUser, (c) => {
     userId: c.get('userId'),
   });
 });
+
+app.route('/payments/sessions', sessionRoute)
 
 const port = process.env.PORT || 3005;
 serve({
