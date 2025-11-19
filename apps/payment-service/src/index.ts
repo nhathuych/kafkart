@@ -4,6 +4,7 @@ import { requestLogger } from './middleware/request.logger.js';
 import { clerkMiddleware } from '@hono/clerk-auth';
 import { shouldBeUser } from './middleware/auth.middleware.js';
 import sessionRoute from './routes/session.route.js';
+import webhookRoute from './routes/webhooks.route.js';
 
 const app = new Hono();
 
@@ -20,7 +21,8 @@ app.get('/health', shouldBeUser, (c) => {
   });
 });
 
-app.route('/payments/sessions', sessionRoute)
+app.route('/payments/sessions', sessionRoute);
+app.route('/payments/webhooks', webhookRoute);
 
 const port = process.env.PORT || 3005;
 serve({
