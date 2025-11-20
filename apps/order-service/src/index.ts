@@ -3,6 +3,7 @@ import Clerk from '@clerk/fastify';
 import { shouldBeUser } from './hooks/auth.hook.js';
 import { connectToOrderDB } from '@repo/order-db';
 import { orderRoute } from './routes/order.route.js';
+import { consumer, producer } from './utils/kafka.js';
 
 const fastify = Fastify({
   logger: {
@@ -58,7 +59,11 @@ fastify.get('/health', { preHandler: shouldBeUser }, async (request, reply) => {
   });
 });
 
-await connectToOrderDB();
+Promise.all([
+  connectToOrderDB(),
+  producer.connect(),
+  consumer.connect(),
+]);
 const port = process.env.PORT || 3004;
 fastify.listen({ port: Number(port) }, (err, address) => {
   if (err) throw err;
