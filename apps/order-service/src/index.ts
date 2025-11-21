@@ -4,6 +4,7 @@ import { shouldBeUser } from './hooks/auth.hook.js';
 import { connectToOrderDB } from '@repo/order-db';
 import { orderRoute } from './routes/order.route.js';
 import { consumer, producer } from './utils/kafka.js';
+import { runKafkaSubcriptions } from './utils/kafka.subscriptions.js';
 
 const fastify = Fastify({
   logger: {
@@ -64,6 +65,8 @@ Promise.all([
   producer.connect(),
   consumer.connect(),
 ]);
+await runKafkaSubcriptions();
+
 const port = process.env.PORT || 3004;
 fastify.listen({ port: Number(port) }, (err, address) => {
   if (err) throw err;
